@@ -21,15 +21,16 @@
 - [x] Bullet textures
 - [x] Bullet lights
 - [x] Any furhter lights
+- [x] Crates
+- [x] Exploding parts
+- [x] Foreground building sizing
+- [x] Background building sizing
 
-
-- [ ] Foreground building sizing
-- [ ] Background building sizing
+- [ ] Advanced camera
 - [ ] Building textures
 
 - [ ] Enemy management
-- [ ] Advanced camera
-- [ ] Crates
+- [ ] Crate managements
 - [ ] Power-ups
 
 - [ ] Restore time from hit
@@ -37,7 +38,6 @@
 - [ ] Enemies shoot bullets
 
 - [ ] Explosion force
-- [ ] Exploding parts
 
 - [ ] Enemy guns point at player
 - [ ] Background quads

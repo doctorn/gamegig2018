@@ -54,7 +54,7 @@ public class GameWorld extends GameState {
     addObject(test);
     enemies.add(test);
     // addObject(new Crate(this, new Vector3f(20f, 2f, 0f)));
-    camera = new net.tundra.core.scene.OrbitalCamera(player, 30f);
+    camera = new PlayerCamera();
 
     for (int i = -1; i < 2; i++) {
       ForegroundBuilding fb =
@@ -222,6 +222,10 @@ public class GameWorld extends GameState {
 
   public boolean timeSlowed() {
     return timeSlowed;
+  }
+
+  public Player getPlayer() {
+    return player;
   }
 
   @Override
