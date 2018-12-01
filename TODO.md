@@ -1,11 +1,14 @@
 - [x] Basic camera 
 - [x] Global lights
 
-- [ ] Add foreground buildings (collisions)
+- [x] Add foreground buildings collisions
+- [ ] Foreground building sizing
+- [x] Foreground building collapse on collision
 - [ ] Background buildings
 - [ ] Building textures
+- [ ] Building popins
 
-- [ ] Player movement
+- [x] Player movement
 - [ ] Enemies
 - [ ] Crates
 - [ ] Bullets
@@ -14,11 +17,11 @@
 - [ ] Advanced camera
 
 - [x] Smoke
-- [ ] Explosions 
+- [x] Explosions 
 - [ ] Explosion force
 - [ ] Exploding parts
 
-- [ ] Shadow mapping
+- [x] Shadow mapping
 - [ ] Player textures
 - [ ] Gun
 - [ ] Enemy textures

@@ -5,7 +5,7 @@ import net.tundra.core.TundraException;
 
 public class Main extends Game {
   public Main() {
-    super(800, 600, "gamegig2018", false);
+    super(1600, 1000, "gamegig2018", false);
   }
 
   @Override
