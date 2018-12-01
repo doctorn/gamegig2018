@@ -33,28 +33,19 @@
 - [x] Building borders
 - [x] Fix shadow map constant
 - [x] Player die if fall off
-
-- [ ] Air conditioners
+- [x] Restore time from hit
+- [x] Timer (render)
+- [x] Air conditioners
 
 - [ ] Enemy guns point at player
 - [ ] Enemies shoot bullets
-
-- [ ] Restore time from hit
-
-- [ ] Timer (render)
-
-- [ ] Power-ups
+- [ ] Player lose time when hit
 
 - [ ] Title page
 - [ ] Score screen
 - [ ] Restart
 
 # Asset TODO list
-
-- [ ] Speed-up powerup
-- [ ] Double bullet powerup
-- [ ] More slow down powerup
-- [ ] More time
 
 - [x] Building sides
 - [x] Building roofs
