@@ -12,7 +12,7 @@ public class Main extends Game {
   public void initStates() throws TundraException {
     addState(new Tundra());
     addState(new GameWorld());
-    enterState(0);
+    enterState(1);
   }
 
   public static void main(String args[]) throws TundraException {
