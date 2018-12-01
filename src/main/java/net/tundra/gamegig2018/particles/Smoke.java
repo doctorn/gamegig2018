@@ -19,10 +19,22 @@ public class Smoke extends GameObject {
   private Animation smoke;
 
   public Smoke(GameWorld world, Vector2f position) {
-    this.position = new Vector3f(position.x, position.y, 0);
-    velocity = new Vector2f(-0.005f + RANDOM.nextFloat() * 0.01f, RANDOM.nextFloat() * 0.01f);
+    this(world, 0, new Vector3f(position.x, position.y, 0f));
+  }
 
-    smoke = new Animation(GameWorld.SMOKE, RANDOM.nextInt(6), 0, 7, 0, false, 12);
+  public Smoke(GameWorld world, int start, Vector2f position) {
+    this(world, start, new Vector3f(position.x, position.y, 0f));
+  }
+
+  public Smoke(GameWorld world, int start, Vector3f position) {
+    this.position = new Vector3f(position);
+    velocity = new Vector2f(-0.005f + RANDOM.nextFloat() * 0.01f, RANDOM.nextFloat() * 0.01f);
+    if (start != 0) {
+      velocity = new Vector2f(0);
+      world.after(200, this::kill);
+    }
+
+    smoke = new Animation(GameWorld.SMOKE, start + RANDOM.nextInt(6 - start), 0, 7, 0, false, 12);
     smoke.start();
   }
 

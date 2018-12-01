@@ -22,8 +22,8 @@ import org.joml.Vector3f;
 
 public class GameWorld extends GameState {
   public static Font FONT;
-  public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN;
-  public static Sprite BULLET;
+  public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN, ANDROID_PARTS;
+  public static Sprite BULLET, CRATE;
   private boolean timeSlowed = false;
   private Camera camera, shadow;
   private Player player;
@@ -43,14 +43,17 @@ public class GameWorld extends GameState {
     EXPLOSION = new SpriteSheet("res/explosion.png", 128, 128);
     TIM = new SpriteSheet("res/timothy.png", 24, 24);
     ANDROID = new SpriteSheet("res/android.png", 24, 24);
+    ANDROID_PARTS = new SpriteSheet("res/android.png", 8, 8);
     GUN = new SpriteSheet("res/gun.png", 24, 24);
     BULLET = new Sprite("res/bullet.png");
+    CRATE = new Sprite("res/crate.png");
 
     player = new Player(this, new Vector2f(0f, 2f));
     addObject(player);
     Enemy test = new Enemy(this, new Vector2f(20f, 2f));
     addObject(test);
     enemies.add(test);
+    // addObject(new Crate(this, new Vector3f(20f, 2f, 0f)));
     camera = new net.tundra.core.scene.OrbitalCamera(player, 30f);
 
     for (int i = -1; i < 2; i++) {
@@ -94,9 +97,9 @@ public class GameWorld extends GameState {
     addCamera(camera);
     activate(camera);
 
-    main = new FixedLight(new Vector3f(1f, 1f, -1f), new Vector3f(0.5f, 0.5f, 0.5f));
+    main = new FixedLight(new Vector3f(-1f, -1f, -2f), new Vector3f(0.8f, 0.8f, 0.8f));
     addLight(main);
-    shadow = new ShadowCamera(player, new Vector3f(25, 25f, 25f));
+    shadow = new ShadowCamera(player, new Vector3f(12.5f, 12.5f, 25f));
     addCamera(shadow);
     enableShadowMapping(shadow, main);
 

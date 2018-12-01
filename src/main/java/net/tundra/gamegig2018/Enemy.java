@@ -8,6 +8,7 @@ import net.tundra.core.resources.models.Model;
 import net.tundra.core.resources.sprites.Animation;
 import net.tundra.core.scene.PhysicsObject;
 import net.tundra.gamegig2018.particles.Explosion;
+import net.tundra.gamegig2018.particles.Part;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -27,7 +28,7 @@ public class Enemy extends PhysicsObject {
         new Vector3f(0.3f, 0.5f, 0.5f).mul(24f / 16f),
         1f,
         false);
-    running = new Animation(GameWorld.ANDROID, 0, 2, 5, 2, true, 3);
+    running = new Animation(GameWorld.ANDROID, 0, 0, 5, 0, true, 3);
     running.start();
     this.world = world;
   }
@@ -50,6 +51,10 @@ public class Enemy extends PhysicsObject {
   public void onCollision(PhysicsObject other) {
     if (other instanceof Player || other instanceof Bullet) {
       world.addObject(new Explosion(world, new Vector2f(getPosition().x, getPosition().y)));
+      for (int i = 0; i < 5; i++)
+        world.addObject(
+            new Part(
+                world, new Vector2f(getPosition().x, getPosition().y), GameWorld.ANDROID_PARTS));
       kill();
     }
   }

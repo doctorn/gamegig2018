@@ -14,10 +14,12 @@ public class ShadowCamera extends TrackingCamera {
   @Override
   public Matrix4f getViewProjectionMatrix(int width, int height) {
     return new Matrix4f()
-        .ortho(-50f, 50f, -50f, 50f, 0.01f, 100f)
+        .ortho(-50f, 50f, -50f, 50f, 0.01f, 50f)
         .lookAt(getPosition(), getTarget(), getUp());
   }
 
   @Override
-  public void update(Game game, float delta) {}
+  public void update(Game game, float delta) {
+    setPosition(getPosition());
+  }
 }
