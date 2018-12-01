@@ -19,7 +19,12 @@ public class Player extends PhysicsObject {
 
   public Player(GameWorld world, Vector3f position) {
     super(
-        position, Model.CUBE, new Quaternionf(), new Vector3f(0.5f, 0.5f, 0.5f).mul(24f / 16f), 1f);
+        position,
+        Model.CUBE,
+        new Quaternionf(),
+        new Vector3f(0.3f, 0.5f, 0.5f).mul(24f / 16f),
+        1f,
+        false);
     running = new Animation(GameWorld.TIM, 0, 3, 5, 3, true, 12);
     running.start();
     this.world = world;
@@ -57,6 +62,7 @@ public class Player extends PhysicsObject {
   public void update(Game game, float delta) throws TundraException {
     running.update(delta);
     javax.vecmath.Vector3f velocity = new javax.vecmath.Vector3f();
+    getBody().setAngularVelocity(new javax.vecmath.Vector3f());
     getBody().getLinearVelocity(velocity);
     getBody().setLinearVelocity(new javax.vecmath.Vector3f(8f, velocity.y, 0f));
 
@@ -71,7 +77,12 @@ public class Player extends PhysicsObject {
     if (other instanceof ForegroundBuilding) {
       jumps = 0;
       ForegroundBuilding building = (ForegroundBuilding) other;
-      if (building.getCollapsable()) building.setToCollapse(true);
+      if (building.getCollapsable())
+        world.after(
+            500,
+            () -> {
+              building.setToCollapse(true);
+            });
     }
   }
 

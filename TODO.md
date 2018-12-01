@@ -22,9 +22,9 @@
 - [ ] Exploding parts
 
 - [x] Shadow mapping
-- [ ] Player textures
-- [ ] Gun
-- [ ] Enemy textures
+- [x] Player textures
+- [x] Gun
+- [x] Enemy textures
 - [ ] Bullet textures
 - [ ] Background quads
 - [ ] Bullet lights

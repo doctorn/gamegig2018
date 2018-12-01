@@ -18,7 +18,7 @@ public class Explosion extends GameObject {
 
   public Explosion(GameWorld world, Vector2f position) {
     this.world = world;
-    this.position = new Vector3f(position.x, position.y, 0.001f);
+    this.position = new Vector3f(position.x, position.y, 1f);
     // TODO screenshake
     explosion = new Animation(GameWorld.EXPLOSION, 0, 0, 1, 0, false, 12);
     explosion.start();
@@ -36,9 +36,10 @@ public class Explosion extends GameObject {
 
   @Override
   public void render(Game game, Graphics graphics) throws TundraException {
+    boolean lighting = world.lightingEnabled();
     world.setLighting(false);
     graphics.drawModel(
         Model.PLANE, explosion.currentFrame(), new Matrix4f().translate(position).scale(4f));
-    world.setLighting(true);
+    world.setLighting(lighting);
   }
 }
