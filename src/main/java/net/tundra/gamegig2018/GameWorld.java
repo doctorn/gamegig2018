@@ -22,13 +22,14 @@ import org.joml.Vector3f;
 
 public class GameWorld extends GameState {
   public static Font FONT;
-  public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN, ANDROID_PARTS;
+  public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN, ANDROID_PARTS, BUILDING;
   public static Sprite BULLET, CRATE, FILTER;
   private boolean timeSlowed = false;
   private Camera camera, shadow;
   private Player player;
   private Enemy triggered;
   private List<Enemy> enemies = new ArrayList<>();
+  private List<Crate> crates  = new ArrayList<>();
   private List<ForegroundBuilding> foregroundBuildings = new ArrayList<>();
   private List<List<BackgroundBuilding>> backgroundBuildingsList = new ArrayList<>();
   private float slowBarWidth;
@@ -44,6 +45,7 @@ public class GameWorld extends GameState {
     TIM = new SpriteSheet("res/timothy.png", 24, 24);
     ANDROID = new SpriteSheet("res/android.png", 24, 24);
     ANDROID_PARTS = new SpriteSheet("res/android.png", 8, 8);
+    BUILDING = new SpriteSheet("res/buildings.png", 32, 32);
     GUN = new SpriteSheet("res/gun.png", 24, 24);
     BULLET = new Sprite("res/bullet.png");
     CRATE = new Sprite("res/crate.png");
@@ -132,6 +134,9 @@ public class GameWorld extends GameState {
       int width = collapse ? 5 : 8 + 4 * random.nextInt(2);
       int height = random.nextInt(5) - 2;
       int gap = 4;
+      if(currentFore.getPosition().y + height <= 5) {
+        height = -height;
+      }
       ForegroundBuilding fb =
           new ForegroundBuilding(
               new Vector3f(
@@ -144,6 +149,46 @@ public class GameWorld extends GameState {
               10);
       addObject(fb);
       foregroundBuildings.add(fb);
+
+      if(!collapse) {
+        //spawn crate(s)
+        int numCrates = random.nextInt(3) + 1;
+        boolean pathCrate = (random.nextInt(8) == 0);
+        for(int i = 0; i < numCrates; i++) {
+          Crate crate = new Crate(
+              this,
+              new Vector3f(
+                  fb.getPosition().x + (fb.getWidth() - 1) * (2 * random.nextFloat() - 1),
+                  fb.getPosition().y + 10f,
+                  fb.getPosition().z + 3f * (i%2==0?1f:-1f)),
+              random.nextFloat());
+          addObject(crate);
+          crates.add(crate);
+        }
+
+        if(pathCrate) {
+          Crate crate = new Crate(this,
+              new Vector3f(
+                  fb.getPosition().x + (fb.getWidth() - 1) * (2 * random.nextFloat() - 1),
+                  fb.getPosition().y + 10f,
+                  fb.getPosition().z),
+              random.nextFloat());
+          addObject(crate);
+          crates.add(crate);
+        }
+
+        //spawn enemy
+        if( !(random.nextInt(4) == 0) && !pathCrate ) {
+          Enemy enemy = new Enemy(
+              this,
+              new Vector2f(
+                  fb.getPosition().x + fb.getWidth() *( -1 + 0.25f + 0.75f*random.nextFloat()),
+                  fb.getPosition().y + fb.getHeight() + 0.05f));
+          addObject(enemy);
+          enemies.add(enemy);
+          System.out.println(enemy.getPosition() + ", " + player.getPosition());
+        }
+      }
     }
 
     for (int j = 0; j < backgroundBuildingsList.size(); j++) {

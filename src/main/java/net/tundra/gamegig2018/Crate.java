@@ -14,8 +14,8 @@ import org.joml.Vector3f;
 public class Crate extends PhysicsObject {
   private GameWorld world;
 
-  public Crate(GameWorld world, Vector3f position) {
-    super(position, Model.CUBE, new Quaternionf(), new Vector3f(1f, 1f, 1f), 3f, false);
+  public Crate(GameWorld world, Vector3f position, float angle) {
+    super(position, Model.CUBE, new Quaternionf().rotateY(angle), new Vector3f(1f, 1f, 1f), 3f, false);
     this.world = world;
   }
 
