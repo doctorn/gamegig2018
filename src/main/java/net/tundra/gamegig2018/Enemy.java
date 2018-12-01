@@ -44,7 +44,7 @@ public class Enemy extends PhysicsObject {
         System.out.println(getPosition().z);
         this.kill();
     }
-    if( Math.abs(world.getPlayer().getPosition().x - getPosition().x) < 20) {
+    if(Math.abs(world.getPlayer().getPosition().x - getPosition().x) < 20) {
       running.update(delta);
       javax.vecmath.Vector3f velocity = new javax.vecmath.Vector3f();
       getBody().setAngularVelocity(new javax.vecmath.Vector3f());
@@ -56,6 +56,8 @@ public class Enemy extends PhysicsObject {
   @Override
   public void onCollision(PhysicsObject other) {
     if (other instanceof Player || other instanceof Bullet) {
+      if (other instanceof Player) world.addTime(-4000f);
+      else if (other instanceof Bullet) world.addTime(4000f);
       world.addObject(new Explosion(world, new Vector2f(getPosition().x, getPosition().y)));
       for (int i = 0; i < 5; i++)
         world.addObject(
