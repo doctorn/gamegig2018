@@ -12,32 +12,32 @@ import org.joml.Quaternionf;
 public class ForegroundBuilding extends PhysicsObject {
 
     private boolean collapsable, toCollapse = false;
-    private int height, width;
+    private int height, width, depth;
 
-    public ForegroundBuilding(Vector3f position, boolean collapsing, int width, int height) {
+    public ForegroundBuilding(Vector3f position, boolean collapsing, int width, int height, int depth) {
         super(position,
             Model.CUBE,
             new Quaternionf(),
-            new Vector3f((float)width, (float)height, 1f),
+            new Vector3f((float)width, (float)height, (float)depth),
             collapsing ? 100f : 0f);
         collapsable = collapsing;
         getBody().setGravity(new javax.vecmath.Vector3f(0,0,0));
-        this.width = width;
+        this.width  = width;
         this.height = height;
-
+        this.depth  = depth;
     }
 
     @Override
     public void render(Game game, Graphics graphics) throws TundraException {
         if (collapsable) {
-            graphics.setColour(new Vector3f(0.6f, 0.6f, 0.6f));
+            graphics.setColour(new Vector3f(0.4f, 0.4f, 0.4f));
         } else {
             graphics.setColour(new Vector3f(0.6f, 0.6f, 0.6f));
         }
 
         graphics.drawModel(
             Model.CUBE,
-            new Matrix4f().translate(getPosition()).scale(width, height, 1).rotate(getRotation()));
+            new Matrix4f().translate(getPosition()).rotate(getRotation()).scale(width, height, depth));
 
     }
 

@@ -10,6 +10,17 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class BackgroundBuilding extends GameObject implements Trackable {
+    private int width, height, depth;
+
+    private Vector3f position;
+
+    public BackgroundBuilding (Vector3f position, int width, int height, int depth) {
+        this.position = position;
+        this.height = height;
+        this.width  = width;
+        this.depth  = depth;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -18,20 +29,10 @@ public class BackgroundBuilding extends GameObject implements Trackable {
         return height;
     }
 
-    private int width, height;
-    private Vector3f position;
-
-
-    public BackgroundBuilding (Vector3f position, int width, int height) {
-        this.position = position;
-        this.height = height;
-        this.width  = width;
-    }
-
     @Override
     public void render(Game game, Graphics graphics) throws TundraException {
         graphics.drawModel(Model.CUBE,
-            new Matrix4f().translate(getPosition()).scale(width, height, 1));
+            new Matrix4f().translate(getPosition()).scale(width, height, depth));
     }
 
     @Override
