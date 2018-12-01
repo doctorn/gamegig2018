@@ -1,10 +1,10 @@
 package net.tundra.gamegig2018;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-
 import net.tundra.core.Game;
 import net.tundra.core.GameState;
 import net.tundra.core.TundraException;
@@ -22,6 +22,7 @@ public class GameWorld extends GameState {
   public static Font FONT;
   public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN;
   public static Sprite BULLET;
+  private boolean timeSlowed = false;
   private Camera camera, shadow;
   private Player player;
   private List<Enemy> enemies = new ArrayList<>();
@@ -43,7 +44,9 @@ public class GameWorld extends GameState {
 
     player = new Player(this, new Vector2f(0f, 2f));
     addObject(player);
-    addObject(new Enemy(this, new Vector2f(20f, 2f)));
+    Enemy test = new Enemy(this, new Vector2f(20f, 2f));
+    addObject(test);
+    enemies.add(test);
     camera = new net.tundra.core.scene.OrbitalCamera(player, 30f);
 
     for (int i = -1; i < 2; i++) {
@@ -101,7 +104,6 @@ public class GameWorld extends GameState {
     }
 
     for(List<BackgroundBuilding> backgroundBuildings : backgroundBuildingsList) {
-
       List<BackgroundBuilding> bbToCull = backgroundBuildings.stream()
           .filter(b -> b.getPosition().x + (float) b.getWidth() < camera.getPosition().x - cullOffset)
           .collect(Collectors.toList());
@@ -121,6 +123,42 @@ public class GameWorld extends GameState {
         }
       }
     }
+
+    Iterator<Enemy> iter = enemies.iterator();
+    while (iter.hasNext()) {
+      if (iter.next().dying()) iter.remove();
+    }
+
+    if (!timeSlowed) {
+      for (Enemy enemy : enemies) {
+        if (enemy.getPosition().sub(player.getPosition()).length() < 10f) {
+          timeSlowed = true;
+          lerp(50, f -> game.setTimescale(f), 1f, 0.2f);
+          after(
+              /* TODO */ 1000,
+              () -> {
+                timeSlowed = false;
+                lerp(50, f -> game.setTimescale(f), 0.2f, 1f);
+              });
+        }
+      }
+    } else {
+      boolean found = false;
+      for (Enemy enemy : enemies) {
+        if (enemy.getPosition().sub(player.getPosition()).length() < 7.5f) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        timeSlowed = false;
+        lerp(50, f -> game.setTimescale(f), 0.2f, 1f);
+      }
+    }
+  }
+
+  public boolean timeSlowed() {
+    return timeSlowed();
   }
 
   @Override
