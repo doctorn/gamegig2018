@@ -57,6 +57,8 @@ public class GameWorld extends GameState {
   private String addedMessage;
   private float addedAmount;
   private Event addedTimeout;
+  private boolean lost = false;
+  private float score = 0f;
 
   @Override
   public void init(Game game) throws TundraException {
@@ -149,8 +151,20 @@ public class GameWorld extends GameState {
 
   @Override
   public void update(Game game, float delta) throws TundraException {
-    timeRemaining -= delta;
-    if (timeRemaining < 0) timeRemaining = 0;
+    if (!lost) {
+      score += delta;
+      timeRemaining -= delta;
+      if (timeRemaining < 0 || player.getPosition().y < -5f) {
+        timeRemaining = 0;
+        lost = true;
+        game.addState(new Score(score));
+        after(
+            500,
+            () -> {
+              game.enterState(3);
+            });
+      }
+    }
 
     List<ForegroundBuilding> fbToCull =
         foregroundBuildings
@@ -361,24 +375,26 @@ public class GameWorld extends GameState {
   }
 
   public void addTime(float toAdd) {
-    timeRemaining += toAdd;
-    added = true;
-    addedAmount = toAdd;
-    int seconds = (int) Math.floor(toAdd / 1000f);
-    int millis = (int) Math.floor((toAdd % 1000f) / 10f);
-    addedMessage =
-        (addedAmount > 0 ? "+" : "")
-            + seconds
-            + ":"
-            + ((Integer.toString(millis).length() == 1) ? "0" : "")
-            + millis;
-    if (addedTimeout != null) addedTimeout.kill();
-    addedTimeout =
-        after(
-            500,
-            () -> {
-              added = false;
-            });
+    if (!lost) {
+      timeRemaining += toAdd;
+      added = true;
+      addedAmount = toAdd;
+      int seconds = (int) Math.floor(toAdd / 1000f);
+      int millis = (int) Math.floor((toAdd % 1000f) / 10f);
+      addedMessage =
+          (addedAmount > 0 ? "+" : "")
+              + seconds
+              + ":"
+              + ((Integer.toString(millis).length() == 1) ? "0" : "")
+              + millis;
+      if (addedTimeout != null) addedTimeout.kill();
+      addedTimeout =
+          after(
+              500,
+              () -> {
+                added = false;
+              });
+    }
   }
 
   @Override
