@@ -17,7 +17,7 @@
 - [ ] Crates
 - [ ] Power-ups
 
-- [ ] Player shoot in time slow
+- [x] Player shoot in time slow
 - [ ] Restore time from hit
 - [ ] Player die if fall off
 - [ ] Enemies shoot bullets
@@ -37,7 +37,7 @@
 - [ ] Enemy guns point at player
 - [ ] Background quads
 
-- [ ] Time slow count down render
+- [x] Time slow count down render
 - [ ] Timer (render)
 
 - [ ] Title page

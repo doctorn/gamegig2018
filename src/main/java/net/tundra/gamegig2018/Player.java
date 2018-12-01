@@ -68,16 +68,18 @@ public class Player extends PhysicsObject {
     getBody().setLinearVelocity(new javax.vecmath.Vector3f(8f, velocity.y, 0f));
 
     if (game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_SPACE) && jumps < 1) {
-      getBody().applyCentralImpulse(new javax.vecmath.Vector3f(0f, 5f, 0f));
-      jumps++;
+      if (!world.timeSlowed()) {
+        getBody().applyCentralImpulse(new javax.vecmath.Vector3f(0f, 5f, 0f));
+        jumps++;
+      } else {
+        world.snapOutTimeSlow(game);
+        world.addObject(
+            new Bullet(
+                world,
+                new Vector2f(getPosition().x, getPosition().y).add(0.8f, -0.4f),
+                new Vector2f((float) Math.cos(gunAngle), (float) Math.sin(gunAngle))));
+      }
     }
-
-    if (game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_B))
-      world.addObject(
-          new Bullet(
-              world,
-              new Vector2f(getPosition().x, getPosition().y).add(0.8f, -0.4f),
-              new Vector2f((float) Math.cos(gunAngle), (float) Math.sin(gunAngle))));
   }
 
   @Override

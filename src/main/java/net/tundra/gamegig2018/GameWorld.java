@@ -25,9 +25,11 @@ public class GameWorld extends GameState {
   private boolean timeSlowed = false;
   private Camera camera, shadow;
   private Player player;
+  private Enemy triggered;
   private List<Enemy> enemies = new ArrayList<>();
   private List<ForegroundBuilding> foregroundBuildings = new ArrayList<>();
   private List<List<BackgroundBuilding>> backgroundBuildingsList = new ArrayList<>();
+  private float slowBarWidth;
   private Light main;
   private static final float cullOffset = 100;
   private static final Random random = new Random();
@@ -56,11 +58,12 @@ public class GameWorld extends GameState {
       foregroundBuildings.add(fb);
     }
 
-    for(int j = 0; j < 2; j++) {
+    for (int j = 0; j < 2; j++) {
       List<BackgroundBuilding> backgroundBuildings = new ArrayList<>();
       for (int i = -1; i < 2; i++) {
         BackgroundBuilding bb =
-            new BackgroundBuilding(new Vector3f((float) i * 22, -10, (float)-30*(j + 1)), 10, 10, 10);
+            new BackgroundBuilding(
+                new Vector3f((float) i * 22, -10, (float) -30 * (j + 1)), 10, 10, 10);
         addObject(bb);
         backgroundBuildings.add(bb);
       }
@@ -83,30 +86,45 @@ public class GameWorld extends GameState {
 
   @Override
   public void update(Game game, float delta) throws TundraException {
-    List<ForegroundBuilding> fbToCull = foregroundBuildings.stream()
-        .filter(b -> b.getPosition().x + (float)b.getWidth() < camera.getPosition().x - cullOffset)
-        .collect(Collectors.toList());
+    List<ForegroundBuilding> fbToCull =
+        foregroundBuildings
+            .stream()
+            .filter(
+                b -> b.getPosition().x + (float) b.getWidth() < camera.getPosition().x - cullOffset)
+            .collect(Collectors.toList());
 
-    for(ForegroundBuilding fb : fbToCull) {
+    for (ForegroundBuilding fb : fbToCull) {
       foregroundBuildings.remove(fb);
       fb.kill();
     }
 
     ForegroundBuilding currentFore = foregroundBuildings.get(foregroundBuildings.size() - 1);
-    if(currentFore.getPosition().x - currentFore.getWidth() < camera.getPosition().x + cullOffset) {
+    if (currentFore.getPosition().x - currentFore.getWidth()
+        < camera.getPosition().x + cullOffset) {
       int width = random.nextInt(5) == 0 ? 7 : 10 * (1 + random.nextInt(2));
       int gap = 4;
       System.out.println(width);
       ForegroundBuilding fb =
-          new ForegroundBuilding(new Vector3f( currentFore.getPosition().x + currentFore.getWidth() + width + gap, -10, 0), width == 7, width, 10, 10);
+          new ForegroundBuilding(
+              new Vector3f(
+                  currentFore.getPosition().x + currentFore.getWidth() + width + gap, -10, 0),
+              width == 7,
+              width,
+              10,
+              10);
       addObject(fb);
       foregroundBuildings.add(fb);
     }
 
-    for(List<BackgroundBuilding> backgroundBuildings : backgroundBuildingsList) {
-      List<BackgroundBuilding> bbToCull = backgroundBuildings.stream()
-          .filter(b -> b.getPosition().x + (float) b.getWidth() < camera.getPosition().x - cullOffset)
-          .collect(Collectors.toList());
+    for (List<BackgroundBuilding> backgroundBuildings : backgroundBuildingsList) {
+      List<BackgroundBuilding> bbToCull =
+          backgroundBuildings
+              .stream()
+              .filter(
+                  b ->
+                      b.getPosition().x + (float) b.getWidth()
+                          < camera.getPosition().x - cullOffset)
+              .collect(Collectors.toList());
 
       for (BackgroundBuilding bb : bbToCull) {
         backgroundBuildings.remove(bb);
@@ -114,10 +132,15 @@ public class GameWorld extends GameState {
       }
 
       BackgroundBuilding currentBack = backgroundBuildings.get(backgroundBuildings.size() - 1);
-      if (currentBack.getPosition().x - currentBack.getWidth() < camera.getPosition().x + cullOffset) {
+      if (currentBack.getPosition().x - currentBack.getWidth()
+          < camera.getPosition().x + cullOffset) {
         for (int j = 0; j < 4; j++) {
           BackgroundBuilding bb =
-              new BackgroundBuilding(new Vector3f(currentBack.getPosition().x + 22, -10, (float) -30 * (j + 1)), 10, 10, 10);
+              new BackgroundBuilding(
+                  new Vector3f(currentBack.getPosition().x + 22, -10, (float) -30 * (j + 1)),
+                  10,
+                  10,
+                  10);
           addObject(bb);
           backgroundBuildings.add(bb);
         }
@@ -131,39 +154,52 @@ public class GameWorld extends GameState {
 
     if (!timeSlowed) {
       for (Enemy enemy : enemies) {
-        if (enemy.getPosition().sub(player.getPosition()).length() < 10f) {
-          timeSlowed = true;
-          lerp(50, f -> game.setTimescale(f), 1f, 0.2f);
-          after(
-              /* TODO */ 1000,
+        if (!enemy.used() && enemy.getPosition().sub(player.getPosition()).length() < 10f) {
+          enemy.expend();
+          triggered = enemy;
+          lerp(
+              50,
+              f -> game.setTimescale(f),
+              1f,
+              0.2f,
               () -> {
-                timeSlowed = false;
-                lerp(50, f -> game.setTimescale(f), 0.2f, 1f);
+                timeSlowed = true;
+                lerp(
+                    1000,
+                    f -> {
+                      slowBarWidth = f;
+                    },
+                    game.getWidth(),
+                    0,
+                    () -> {
+                      snapOutTimeSlow(game);
+                    });
               });
         }
       }
-    } else {
-      boolean found = false;
-      for (Enemy enemy : enemies) {
-        if (enemy.getPosition().sub(player.getPosition()).length() < 7.5f) {
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        timeSlowed = false;
-        lerp(50, f -> game.setTimescale(f), 0.2f, 1f);
-      }
-    }
+    } else if (triggered.dying()) snapOutTimeSlow(game);
+  }
+
+  public void snapOutTimeSlow(Game game) {
+    timeSlowed = false;
+    game.setTimescale(1f);
   }
 
   public boolean timeSlowed() {
-    return timeSlowed();
+    return timeSlowed;
   }
 
   @Override
   public void render(Game game, Graphics graphics) throws TundraException {
     graphics.setClearColour(new Vector3f(0.8f, 0.8f, 0.8f));
+    if (timeSlowed) {
+      graphics.setColour(new Vector3f(1f, 1f, 1f));
+      graphics.fillRect(
+          Math.round(game.getWidth() / 2 - slowBarWidth / 2),
+          game.getHeight() - 20,
+          Math.round(slowBarWidth),
+          20);
+    }
   }
 
   @Override

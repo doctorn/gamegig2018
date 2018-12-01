@@ -17,6 +17,7 @@ public class Enemy extends PhysicsObject {
   private float gunAngle = 0f;
   private Animation running;
   private GameWorld world;
+  private boolean slowed = false;
 
   public Enemy(GameWorld world, Vector2f position) {
     super(
@@ -66,5 +67,13 @@ public class Enemy extends PhysicsObject {
             .translate(getPosition().add(0, 0, 0.005f))
             .scale(0.5f * 24f / 16f)
             .rotateZ(-gunAngle));
+  }
+
+  public boolean used() {
+    return slowed;
+  }
+
+  public void expend() {
+    slowed = true;
   }
 }
