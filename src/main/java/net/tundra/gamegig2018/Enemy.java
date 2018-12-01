@@ -40,11 +40,13 @@ public class Enemy extends PhysicsObject {
 
   @Override
   public void update(Game game, float delta) throws TundraException {
-    running.update(delta);
-    javax.vecmath.Vector3f velocity = new javax.vecmath.Vector3f();
-    getBody().setAngularVelocity(new javax.vecmath.Vector3f());
-    getBody().getLinearVelocity(velocity);
-    getBody().setLinearVelocity(new javax.vecmath.Vector3f(-2f, velocity.y, 0f));
+    if( Math.abs(world.getPlayer().getPosition().x - getPosition().x) < 20) {
+      running.update(delta);
+      javax.vecmath.Vector3f velocity = new javax.vecmath.Vector3f();
+      getBody().setAngularVelocity(new javax.vecmath.Vector3f());
+      getBody().getLinearVelocity(velocity);
+      getBody().setLinearVelocity(new javax.vecmath.Vector3f(-4f, velocity.y, 0f));
+    }
   }
 
   @Override

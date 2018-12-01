@@ -29,15 +29,54 @@ public class ForegroundBuilding extends PhysicsObject {
 
     @Override
     public void render(Game game, Graphics graphics) throws TundraException {
-        if (collapsable) {
-            graphics.setColour(new Vector3f(1f, 0.4f, 0.4f));
-        } else {
-            graphics.setColour(new Vector3f(0.6f, 0.6f, 0.6f));
+        //front face
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; j < height; j++) {
+                graphics.drawModel(
+                    Model.PLANE,
+                    GameWorld.BUILDING.getSprite(0,0),
+                    new Matrix4f().translate(getPosition().add(2*i - width + 1, 2*j - height + 1, depth)));
+            }
         }
 
+        //up face
+        /*
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; j < depth; j++) {
+                graphics.drawModel(
+                    Model.PLANE,
+                    GameWorld.BUILDING.getSprite(0,0),
+                    new Matrix4f().translate(getPosition()
+                        .add(2*i - width + 1, height, 2*j - depth + 1))
+                        .rotateX(-(float)Math.PI / 2));
+            }
+        }*/
         graphics.drawModel(
-            Model.CUBE,
-            new Matrix4f().translate(getPosition()).rotate(getRotation()).scale(width, height, depth));
+            Model.PLANE,
+            GameWorld.BUILDING.getSprite(0,0),
+            new Matrix4f()
+                .translate(getPosition().add(0, height, 0))
+                .rotateX(-(float)Math.PI / 2)
+                .scale(width, depth, 1)
+        );
+
+        //side faces
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < depth; j++) {
+                graphics.drawModel(
+                    Model.PLANE,
+                    GameWorld.BUILDING.getSprite(0,0),
+                    new Matrix4f().translate(getPosition()
+                        .add(- width,2*i -  height + 1, 2*j - depth + 1))
+                        .rotateY(-(float)Math.PI / 2));
+                graphics.drawModel(
+                    Model.PLANE,
+                    GameWorld.BUILDING.getSprite(0,0),
+                    new Matrix4f().translate(getPosition()
+                        .add(width,2*i -  height + 1, 2*j - depth + 1))
+                        .rotateY((float)Math.PI / 2));
+            }
+        }
 
     }
 
