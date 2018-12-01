@@ -10,10 +10,13 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Quaternionf;
 
+import java.util.Random;
+
 public class ForegroundBuilding extends PhysicsObject {
 
     private boolean collapsable, toCollapse = false;
     private int height, width, depth;
+    private boolean airconL, airconR;
 
     public ForegroundBuilding(Vector3f position, boolean collapsing, int width, int height, int depth) {
         super(position,
@@ -26,6 +29,8 @@ public class ForegroundBuilding extends PhysicsObject {
         this.width  = width;
         this.height = height;
         this.depth  = depth;
+        this.airconL = (new Random()).nextInt(4) == 0;
+        this.airconR = (new Random()).nextInt(4) == 0 && !(collapsable && airconL);
     }
 
     @Override
@@ -95,6 +100,22 @@ public class ForegroundBuilding extends PhysicsObject {
         );
 
 
+        //draw aircon?
+        if(airconL)
+            graphics.drawModel(
+                Model.PLANE,
+                GameWorld.AIRCON,
+                new Matrix4f()
+                    .translate(getPosition().add(-(width - 2), height + 1, -depth + 1))
+            );
+
+        if(airconR)
+            graphics.drawModel(
+                Model.PLANE,
+                GameWorld.AIRCON,
+                new Matrix4f()
+                    .translate(getPosition().add(width - 2, height + 1, -depth + 1))
+            );
 
         //side faces
         graphics.drawModel(

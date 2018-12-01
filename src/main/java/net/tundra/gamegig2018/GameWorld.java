@@ -33,6 +33,7 @@ public class GameWorld extends GameState {
   public static Sprite BULLET,
       CRATE,
       FILTER,
+      AIRCON,
       BUILDING_10x10,
       BUILDING_5x10,
       BUILDING_8x10,
@@ -64,7 +65,7 @@ public class GameWorld extends GameState {
     CRATE = new Sprite("res/crate.png");
     CRATE_PARTS = new SpriteSheet("res/crate.png", 8, 8);
     FILTER = new Sprite("res/filter.png");
-
+    AIRCON = new Sprite("res/aircon.png");
     BUILDING_5x10 = new Sprite("res/building5x10.png");
     BUILDING_10x10 = new Sprite("res/building8x10.png");
     BUILDING_8x10 = new Sprite("res/building10x10.png");
