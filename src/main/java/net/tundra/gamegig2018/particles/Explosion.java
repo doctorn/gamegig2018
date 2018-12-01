@@ -27,6 +27,7 @@ public class Explosion extends GameObject {
     explosion.start();
     light = new FixedLight(position.x, position.y, 1f, 1f, 1f, 1f);
     world.addLight(light);
+    world.shake(500);
   }
 
   @Override

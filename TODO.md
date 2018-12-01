@@ -26,10 +26,11 @@
 - [x] Foreground building sizing
 - [x] Background building sizing
 - [x] Advanced camera
+- [x] Screenshake
+- [x] Enemy management
 
 - [ ] Building textures
 
-- [ ] Enemy management
 - [ ] Crate managements
 - [ ] Power-ups
 

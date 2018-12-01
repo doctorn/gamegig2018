@@ -231,6 +231,10 @@ public class GameWorld extends GameState {
     return player;
   }
 
+  public void shake(float timeout) {
+    ((PlayerCamera) camera).shake(timeout);
+  }
+
   @Override
   public void render(Game game, Graphics graphics) throws TundraException {
     graphics.setClearColour(new Vector3f(1f, 0.71f, 0.76f));
