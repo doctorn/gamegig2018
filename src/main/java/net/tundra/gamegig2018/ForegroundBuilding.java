@@ -66,6 +66,36 @@ public class ForegroundBuilding extends PhysicsObject {
                 .scale(width, depth, 1)
         );
 
+        graphics.setColour(new Vector3f(0.8f, 0.8f, 0.8f));
+        graphics.drawModel(
+            Model.CUBE,
+            new Matrix4f()
+                .translate(getPosition().add(0, height, depth))
+                .scale(width, 0.1f, 0.1f)
+        );
+        graphics.drawModel(
+            Model.CUBE,
+            new Matrix4f()
+                .translate(getPosition().add(0, height, -depth))
+                .scale(width, 0.1f, 0.1f)
+        );
+        graphics.drawModel(
+            Model.CUBE,
+            new Matrix4f()
+                .translate(getPosition().add(width, height, 0))
+                .rotateY((float)Math.PI / 2)
+                .scale(depth, 0.1f, 0.1f)
+        );
+        graphics.drawModel(
+            Model.CUBE,
+            new Matrix4f()
+                .translate(getPosition().add(-width, height, 0))
+                .rotateY((float)Math.PI / 2)
+                .scale(depth, 0.1f, 0.1f)
+        );
+
+
+
         //side faces
         graphics.drawModel(
             Model.PLANE,

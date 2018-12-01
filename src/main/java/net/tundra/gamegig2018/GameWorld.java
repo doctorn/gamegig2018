@@ -152,7 +152,7 @@ public class GameWorld extends GameState {
       int width = collapse ? 5 : 8 + 4 * random.nextInt(2);
       int height = random.nextInt(5) - 2;
       int gap = 4;
-      if (currentFore.getPosition().y + height <= 5) {
+      if(currentFore.getPosition().y + height + currentFore.getHeight() <= -4 ) {
         height = -height;
       }
       ForegroundBuilding fb =
@@ -177,7 +177,7 @@ public class GameWorld extends GameState {
               new Crate(
                   this,
                   new Vector3f(
-                      fb.getPosition().x + (fb.getWidth() - 1) * (2 * random.nextFloat() - 1),
+                      fb.getPosition().x + (fb.getWidth() - 2) * (2 * random.nextFloat() - 1),
                       fb.getPosition().y + 10f,
                       fb.getPosition().z + 3f * (i % 2 == 0 ? 1f : -1f)),
                   random.nextFloat());
@@ -190,7 +190,7 @@ public class GameWorld extends GameState {
               new Crate(
                   this,
                   new Vector3f(
-                      fb.getPosition().x + (fb.getWidth() - 1) * (2 * random.nextFloat() - 1),
+                      fb.getPosition().x + (fb.getWidth() - 2) * (2 * random.nextFloat() - 1),
                       fb.getPosition().y + 10f,
                       fb.getPosition().z),
                   random.nextFloat());
