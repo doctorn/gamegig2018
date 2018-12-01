@@ -6,12 +6,13 @@
 - [x] Foreground building collapse on collision
 - [ ] Background buildings
 - [ ] Building textures
-- [ ] Building popins
+- [x] Building popins
 
 - [x] Player movement
 - [x] Enemies
+- [ ] Enemies shoot bullets
 - [ ] Crates
-- [ ] Bullets
+- [x] Bullets
 - [ ] Time slow
 - [ ] Power-ups
 - [ ] Advanced camera
@@ -28,7 +29,7 @@
 - [ ] Enemy guns point at player
 - [ ] Bullet textures
 - [ ] Background quads
-- [ ] Bullet lights
+- [x] Bullet lights
 - [ ] Any furhter lights
 
 - [ ] Timer (render)

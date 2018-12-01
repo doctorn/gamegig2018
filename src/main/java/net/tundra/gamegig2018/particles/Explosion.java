@@ -5,7 +5,9 @@ import net.tundra.core.TundraException;
 import net.tundra.core.graphics.Graphics;
 import net.tundra.core.resources.models.Model;
 import net.tundra.core.resources.sprites.Animation;
+import net.tundra.core.scene.FixedLight;
 import net.tundra.core.scene.GameObject;
+import net.tundra.core.scene.Light;
 import net.tundra.gamegig2018.GameWorld;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -15,6 +17,7 @@ public class Explosion extends GameObject {
   private Vector3f position;
   private Animation explosion;
   private GameWorld world;
+  private Light light;
 
   public Explosion(GameWorld world, Vector2f position) {
     this.world = world;
@@ -22,6 +25,8 @@ public class Explosion extends GameObject {
     // TODO screenshake
     explosion = new Animation(GameWorld.EXPLOSION, 0, 0, 1, 0, false, 12);
     explosion.start();
+    light = new FixedLight(position.x, position.y, 1f, 1f, 1f, 1f);
+    world.addLight(light);
   }
 
   @Override
@@ -30,6 +35,7 @@ public class Explosion extends GameObject {
     if (!explosion.isPlaying()) {
       for (int i = 0; i < 25; i++)
         world.addObject(new Smoke(world, new Vector2f(position.x, position.y)));
+      light.kill();
       kill();
     }
   }
