@@ -4,6 +4,7 @@ import net.tundra.core.Game;
 import net.tundra.core.TundraException;
 import net.tundra.core.graphics.Graphics;
 import net.tundra.core.resources.models.Model;
+import net.tundra.core.resources.sprites.Sprite;
 import net.tundra.core.scene.PhysicsObject;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -29,31 +30,36 @@ public class ForegroundBuilding extends PhysicsObject {
 
     @Override
     public void render(Game game, Graphics graphics) throws TundraException {
-        //front face
-        for(int i = 0; i < width; i++) {
-            for(int j = 0; j < height; j++) {
-                graphics.drawModel(
-                    Model.PLANE,
-                    GameWorld.BUILDING.getSprite(0,0),
-                    new Matrix4f().translate(getPosition().add(2*i - width + 1, 2*j - height + 1, depth)));
-            }
+        Sprite current;
+        if(width == 5) {
+            current = GameWorld.BUILDING_5x10;
+        }
+        else if (width == 8) {
+            current = GameWorld.BUILDING_8x10;
+        }
+        else if (width == 12) {
+            current = GameWorld.BUILDING_12x10;
+        }
+        else if (width == 16) {
+            current = GameWorld.BUILDING_16x10;
+        }
+        else {
+            current = GameWorld.BUILDING_10x10;
         }
 
-        //up face
-        /*
-        for(int i = 0; i < width; i++) {
-            for(int j = 0; j < depth; j++) {
-                graphics.drawModel(
-                    Model.PLANE,
-                    GameWorld.BUILDING.getSprite(0,0),
-                    new Matrix4f().translate(getPosition()
-                        .add(2*i - width + 1, height, 2*j - depth + 1))
-                        .rotateX(-(float)Math.PI / 2));
-            }
-        }*/
+        //front face
         graphics.drawModel(
             Model.PLANE,
-            GameWorld.BUILDING.getSprite(0,0),
+            current,
+            new Matrix4f()
+                .translate(getPosition().add(0,0,depth))
+                .scale(width, depth, 1)
+        );
+
+        //up face
+        graphics.setColour(new Vector3f(0.5f, 0.5f, 0.5f));
+        graphics.drawModel(
+            Model.PLANE,
             new Matrix4f()
                 .translate(getPosition().add(0, height, 0))
                 .rotateX(-(float)Math.PI / 2)
@@ -61,6 +67,7 @@ public class ForegroundBuilding extends PhysicsObject {
         );
 
         //side faces
+        /*
         for(int i = 0; i < height; i++) {
             for(int j = 0; j < depth; j++) {
                 graphics.drawModel(
@@ -76,7 +83,23 @@ public class ForegroundBuilding extends PhysicsObject {
                         .add(width,2*i -  height + 1, 2*j - depth + 1))
                         .rotateY((float)Math.PI / 2));
             }
-        }
+        }*/
+        graphics.drawModel(
+            Model.PLANE,
+            GameWorld.BUILDING_10x10,
+            new Matrix4f()
+                .translate(getPosition().add(-width,0,0))
+                .rotateY(-(float)Math.PI / 2)
+                .scale(depth, height, 1)
+        );
+        graphics.drawModel(
+            Model.PLANE,
+            GameWorld.BUILDING_10x10,
+            new Matrix4f()
+                .translate(getPosition().add(width,0,0))
+                .rotateY((float)Math.PI / 2)
+                .scale(depth, height, 1)
+        );
 
     }
 

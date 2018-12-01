@@ -23,7 +23,7 @@ import org.joml.Vector3f;
 public class GameWorld extends GameState {
   public static Font FONT;
   public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN, ANDROID_PARTS, BUILDING;
-  public static Sprite BULLET, CRATE, FILTER;
+  public static Sprite BULLET, CRATE, FILTER, BUILDING_10x10, BUILDING_5x10, BUILDING_8x10, BUILDING_12x10, BUILDING_16x10;
   private boolean timeSlowed = false;
   private Camera camera, shadow;
   private Player player;
@@ -51,13 +51,16 @@ public class GameWorld extends GameState {
     CRATE = new Sprite("res/crate.png");
     FILTER = new Sprite("res/filter.png");
 
+    BUILDING_5x10 = new Sprite("res/building5x10.png");
+    BUILDING_10x10 = new Sprite("res/building8x10.png");
+    BUILDING_8x10 = new Sprite("res/building10x10.png");
+    BUILDING_12x10 = new Sprite("res/building12x10.png");
+    BUILDING_16x10 = new Sprite("res/building16x10.png");
+
     FILTER.enableSmoothing();
 
     player = new Player(this, new Vector2f(0f, 2f));
     addObject(player);
-    Enemy test = new Enemy(this, new Vector2f(20f, 2f));
-    addObject(test);
-    enemies.add(test);
     // addObject(new Crate(this, new Vector3f(20f, 2f, 0f)));
     camera = new PlayerCamera(this);
 
@@ -186,7 +189,6 @@ public class GameWorld extends GameState {
                   fb.getPosition().y + fb.getHeight() + 0.05f));
           addObject(enemy);
           enemies.add(enemy);
-          System.out.println(enemy.getPosition() + ", " + player.getPosition());
         }
       }
     }
