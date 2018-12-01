@@ -36,14 +36,12 @@
 - [x] Restore time from hit
 - [x] Timer (render)
 - [x] Air conditioners
-
-- [ ] Enemy guns point at player
-- [ ] Enemies shoot bullets
-- [ ] Player lose time when hit
-
-- [ ] Title page
-- [ ] Score screen
-- [ ] Restart
+- [x] Enemy guns point at player
+- [x] Enemies shoot bullets
+- [x] Player lose time when hit
+- [x] Title page
+- [x] Score screen
+- [x] Restart
 
 # Asset TODO list
 
