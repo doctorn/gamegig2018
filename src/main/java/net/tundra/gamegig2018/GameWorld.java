@@ -94,7 +94,7 @@ public class GameWorld extends GameState {
             new BackgroundBuilding(
                 new Vector3f((float) i * 22 - j * 3, -10 + (1 + j) * height, (float) -30 * (j + 1)),
                 10,
-                10,
+                20,
                 10);
         addObject(bb);
         backgroundBuildings.add(bb);

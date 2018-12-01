@@ -67,23 +67,6 @@ public class ForegroundBuilding extends PhysicsObject {
         );
 
         //side faces
-        /*
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < depth; j++) {
-                graphics.drawModel(
-                    Model.PLANE,
-                    GameWorld.BUILDING.getSprite(0,0),
-                    new Matrix4f().translate(getPosition()
-                        .add(- width,2*i -  height + 1, 2*j - depth + 1))
-                        .rotateY(-(float)Math.PI / 2));
-                graphics.drawModel(
-                    Model.PLANE,
-                    GameWorld.BUILDING.getSprite(0,0),
-                    new Matrix4f().translate(getPosition()
-                        .add(width,2*i -  height + 1, 2*j - depth + 1))
-                        .rotateY((float)Math.PI / 2));
-            }
-        }*/
         graphics.drawModel(
             Model.PLANE,
             GameWorld.BUILDING_10x10,
