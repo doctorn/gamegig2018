@@ -2,6 +2,8 @@ package net.tundra.gamegig2018;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import net.tundra.core.Game;
 import net.tundra.core.GameState;
 import net.tundra.core.TundraException;
@@ -20,7 +22,9 @@ public class GameWorld extends GameState {
   private Player player;
   private List<Enemy> enemies = new ArrayList<>();
   private List<ForegroundBuilding> foregroundBuildings = new ArrayList<>();
+  private List<BackgroundBuilding> backgroundBuildings = new ArrayList<>();
   private Light main;
+  public static final float cullOffset = 30;
 
   @Override
   public void init(Game game) throws TundraException {
@@ -38,9 +42,18 @@ public class GameWorld extends GameState {
 
     for (int i = -1; i < 2; i++) {
       ForegroundBuilding fb =
-          new ForegroundBuilding(new Vector3f((float) i * 22, -10, 0), i == 1, 10, 10);
+          new ForegroundBuilding(new Vector3f((float) i * 22, -10, 0), false, 10, 10);
       addObject(fb);
       foregroundBuildings.add(fb);
+    }
+
+    for(int j = 0; j < 4; j++) {
+      for (int i = -1; i < 2; i++) {
+        BackgroundBuilding bb =
+            new BackgroundBuilding(new Vector3f((float) i * 22, -10, (float)-3*(j + 1)), 10, 10);
+        addObject(bb);
+        backgroundBuildings.add(bb);
+      }
     }
 
     addCamera(camera);
@@ -58,7 +71,45 @@ public class GameWorld extends GameState {
   }
 
   @Override
-  public void update(Game game, float delta) throws TundraException {}
+  public void update(Game game, float delta) throws TundraException {
+
+    List<ForegroundBuilding> fbToCull = foregroundBuildings.stream()
+        .filter(b -> b.getPosition().x + (float)b.getWidth() < camera.getPosition().x - cullOffset)
+        .collect(Collectors.toList());
+
+    List<BackgroundBuilding> bbToCull = backgroundBuildings.stream()
+        .filter(b -> b.getPosition().x + (float)b.getWidth() < camera.getPosition().x - cullOffset)
+        .collect(Collectors.toList());
+
+    for(ForegroundBuilding fb : fbToCull) {
+      foregroundBuildings.remove(fb);
+      fb.kill();
+    }
+
+    for(BackgroundBuilding bb : bbToCull) {
+      backgroundBuildings.remove(bb);
+      bb.kill();
+    }
+
+    ForegroundBuilding currentFore = foregroundBuildings.get(foregroundBuildings.size() - 1);
+    if(currentFore.getPosition().x - currentFore.getWidth() < camera.getPosition().x + cullOffset) {
+      ForegroundBuilding fb =
+          new ForegroundBuilding(new Vector3f( currentFore.getPosition().x + 22, -10, 0), false, 10, 10);
+      addObject(fb);
+      foregroundBuildings.add(fb);
+    }
+
+    BackgroundBuilding currentBack = backgroundBuildings.get(backgroundBuildings.size() - 1);
+    if(currentBack.getPosition().x - currentBack.getWidth() < camera.getPosition().x + cullOffset) {
+      for(int j = 0; j < 4; j++) {
+        BackgroundBuilding bb =
+            new BackgroundBuilding(new Vector3f(currentBack.getPosition().x + 22, -10, (float)-3*(j + 1)), 10, 10);
+        addObject(bb);
+        backgroundBuildings.add(bb);
+      }
+    }
+
+  }
 
   @Override
   public void render(Game game, Graphics graphics) throws TundraException {

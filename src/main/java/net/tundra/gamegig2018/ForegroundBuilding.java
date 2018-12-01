@@ -37,7 +37,7 @@ public class ForegroundBuilding extends PhysicsObject {
 
         graphics.drawModel(
             Model.CUBE,
-            new Matrix4f().translate(getPosition()).scale(0.1f).rotate(getRotation()));
+            new Matrix4f().translate(getPosition()).scale(width, height, 1).rotate(getRotation()));
 
     }
 
@@ -47,7 +47,6 @@ public class ForegroundBuilding extends PhysicsObject {
             getBody().setGravity(new javax.vecmath.Vector3f(0,0,0));
             getBody().setLinearVelocity(new javax.vecmath.Vector3f(0,0,0));
         } else if (collapsable) {
-            //System.out.println("Should collapse");
             getBody().setGravity(new javax.vecmath.Vector3f(0,-10,0));
         }
     }
