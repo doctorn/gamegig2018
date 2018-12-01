@@ -16,6 +16,7 @@ public class GameWorld extends GameState {
   private Camera camera;
   private Player player;
   private List<Enemy> enemies = new ArrayList<>();
+  private List<ForegroundBuilding> foregroundBuildings = new ArrayList<>();
 
   @Override
   public void init(Game game) throws TundraException {
@@ -23,13 +24,30 @@ public class GameWorld extends GameState {
     player = new Player(new Vector3f());
     addObject(player);
     camera = new net.tundra.core.scene.OrbitalCamera(player, 10f);
+
+    for(int i = -1; i < 2; i++) {
+      ForegroundBuilding fb = new ForegroundBuilding(new Vector3f((float)i * 3, -2, 0), i == 0, 1, 1);
+      addObject(fb);
+      foregroundBuildings.add(fb);
+    }
+
     addCamera(camera);
     activate(camera);
+    togglePhysics();
     toggleDebug();
   }
 
   @Override
-  public void update(Game game, float delta) throws TundraException {}
+  public void update(Game game, float delta) throws TundraException {
+    if(game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_C)) {
+      System.out.println("Collapsing buildings");
+      for(ForegroundBuilding fb : foregroundBuildings) {
+        if (fb.getCollapsable()) {
+          fb.setToCollapse(true);
+        }
+      }
+    }
+  }
 
   @Override
   public void render(Game game, Graphics graphics) throws TundraException {
