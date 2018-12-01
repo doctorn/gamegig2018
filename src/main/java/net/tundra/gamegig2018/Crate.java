@@ -6,6 +6,7 @@ import net.tundra.core.graphics.Graphics;
 import net.tundra.core.resources.models.Model;
 import net.tundra.core.scene.PhysicsObject;
 import net.tundra.gamegig2018.particles.Explosion;
+import net.tundra.gamegig2018.particles.Part;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -15,7 +16,13 @@ public class Crate extends PhysicsObject {
   private GameWorld world;
 
   public Crate(GameWorld world, Vector3f position, float angle) {
-    super(position, Model.CUBE, new Quaternionf().rotateY(angle), new Vector3f(1f, 1f, 1f), 3f, false);
+    super(
+        position,
+        Model.CUBE,
+        new Quaternionf().rotateY(angle),
+        new Vector3f(1f, 1f, 1f),
+        3f,
+        false);
     this.world = world;
   }
 
@@ -24,10 +31,18 @@ public class Crate extends PhysicsObject {
 
   @Override
   public void onCollision(PhysicsObject other) {
-    // TODO parts
-    if (other instanceof Player) kill();
-    else if (other instanceof Bullet) {
+    if (other instanceof Player) {
+      world.shake(500);
+      for (int i = 0; i < 5; i++)
+        world.addObject(
+            new Part(world, new Vector2f(getPosition().x, getPosition().y), GameWorld.CRATE_PARTS));
+
+      kill();
+    } else if (other instanceof Bullet) {
       world.addObject(new Explosion(world, new Vector2f(getPosition().x, getPosition().y)));
+      for (int i = 0; i < 5; i++)
+        world.addObject(
+            new Part(world, new Vector2f(getPosition().x, getPosition().y), GameWorld.CRATE_PARTS));
       kill();
     }
   }
