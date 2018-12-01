@@ -10,6 +10,7 @@ public class Main extends Game {
 
   @Override
   public void initStates() throws TundraException {
+    getInput().setMouseGrabbed(true);
     addState(new Tundra());
     addState(new GameWorld());
     enterState(1);

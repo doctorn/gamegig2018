@@ -9,12 +9,14 @@ import net.tundra.core.Game;
 import net.tundra.core.GameState;
 import net.tundra.core.TundraException;
 import net.tundra.core.graphics.Graphics;
+import net.tundra.core.resources.models.Model;
 import net.tundra.core.resources.sprites.Font;
 import net.tundra.core.resources.sprites.Sprite;
 import net.tundra.core.resources.sprites.SpriteSheet;
 import net.tundra.core.scene.Camera;
 import net.tundra.core.scene.FixedLight;
 import net.tundra.core.scene.Light;
+import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -58,12 +60,16 @@ public class GameWorld extends GameState {
       foregroundBuildings.add(fb);
     }
 
-    for(int j = 0; j < 2; j++) {
+    for (int j = 0; j < 2; j++) {
       List<BackgroundBuilding> backgroundBuildings = new ArrayList<>();
       for (int i = -3; i < 2; i++) {
         int height = random.nextInt(5);
         BackgroundBuilding bb =
-            new BackgroundBuilding(new Vector3f((float) i * 22 - j*3, -10 + (1+j)*height, (float)-30*(j + 1)), 10, 10, 10);
+            new BackgroundBuilding(
+                new Vector3f((float) i * 22 - j * 3, -10 + (1 + j) * height, (float) -30 * (j + 1)),
+                10,
+                10,
+                10);
         addObject(bb);
         backgroundBuildings.add(bb);
       }
@@ -75,9 +81,10 @@ public class GameWorld extends GameState {
       int height = random.nextInt(5);
       BackgroundBuilding bb =
           new BackgroundBuilding(
-              new Vector3f((float) i * 22 - 3 * backgroundBuildingsList.size(), height - 80, (float)-90),
+              new Vector3f(
+                  (float) i * 22 - 3 * backgroundBuildingsList.size(), height, (float) -90),
               10,
-              100,
+              20,
               10);
       addObject(bb);
       backgroundBuildings.add(bb);
@@ -100,17 +107,21 @@ public class GameWorld extends GameState {
 
   @Override
   public void update(Game game, float delta) throws TundraException {
-    List<ForegroundBuilding> fbToCull = foregroundBuildings.stream()
-        .filter(b -> b.getPosition().x + (float)b.getWidth() < camera.getPosition().x - cullOffset)
-        .collect(Collectors.toList());
+    List<ForegroundBuilding> fbToCull =
+        foregroundBuildings
+            .stream()
+            .filter(
+                b -> b.getPosition().x + (float) b.getWidth() < camera.getPosition().x - cullOffset)
+            .collect(Collectors.toList());
 
-    for(ForegroundBuilding fb : fbToCull) {
+    for (ForegroundBuilding fb : fbToCull) {
       foregroundBuildings.remove(fb);
       fb.kill();
     }
 
     ForegroundBuilding currentFore = foregroundBuildings.get(foregroundBuildings.size() - 1);
-    if(currentFore.getPosition().x - currentFore.getWidth() < camera.getPosition().x + cullOffset) {
+    if (currentFore.getPosition().x - currentFore.getWidth()
+        < camera.getPosition().x + cullOffset) {
       boolean collapse = random.nextInt(5) == 0;
       int width = collapse ? 5 : 8 + 4 * random.nextInt(2);
       int height = random.nextInt(5) - 2;
@@ -129,12 +140,17 @@ public class GameWorld extends GameState {
       foregroundBuildings.add(fb);
     }
 
-    for(int j = 0; j < backgroundBuildingsList.size(); j++) {
+    for (int j = 0; j < backgroundBuildingsList.size(); j++) {
       List<BackgroundBuilding> backgroundBuildings = backgroundBuildingsList.get(j);
 
-      List<BackgroundBuilding> bbToCull = backgroundBuildings.stream()
-          .filter(b -> b.getPosition().x + (float) b.getWidth() < camera.getPosition().x - cullOffset)
-          .collect(Collectors.toList());
+      List<BackgroundBuilding> bbToCull =
+          backgroundBuildings
+              .stream()
+              .filter(
+                  b ->
+                      b.getPosition().x + (float) b.getWidth()
+                          < camera.getPosition().x - cullOffset)
+              .collect(Collectors.toList());
 
       for (BackgroundBuilding bb : bbToCull) {
         backgroundBuildings.remove(bb);
@@ -142,18 +158,19 @@ public class GameWorld extends GameState {
       }
 
       BackgroundBuilding currentBack = backgroundBuildings.get(backgroundBuildings.size() - 1);
-      if (currentBack.getPosition().x - currentBack.getWidth() < camera.getPosition().x + cullOffset) {
+      if (currentBack.getPosition().x - currentBack.getWidth()
+          < camera.getPosition().x + cullOffset) {
         int width = 4 * (2 + random.nextInt(3));
-        int height = (2 *(1+j) * random.nextInt(5)) + ((j==3) ? 0 : -10);
+        int height = (2 * (1 + j) * random.nextInt(5)) + ((j == 3) ? 0 : -10);
         int gap = 4;
         BackgroundBuilding bb =
             new BackgroundBuilding(
                 new Vector3f(
                     currentBack.getPosition().x + currentBack.getWidth() + width + gap,
-                    height - 80,
+                    height,
                     (float) -30 * (j + 1)),
                 width,
-                100,
+                20,
                 10);
         addObject(bb);
         backgroundBuildings.add(bb);
@@ -166,28 +183,30 @@ public class GameWorld extends GameState {
     }
 
     if (!timeSlowed) {
-      for (Enemy enemy : enemies) {
-        if (!enemy.used() && enemy.getPosition().sub(player.getPosition()).length() < 10f) {
-          enemy.expend();
-          triggered = enemy;
-          lerp(
-              50,
-              f -> game.setTimescale(f),
-              1f,
-              0.2f,
-              () -> {
-                timeSlowed = true;
-                lerp(
-                    1000,
-                    f -> {
-                      slowBarWidth = f;
-                    },
-                    game.getWidth(),
-                    0,
-                    () -> {
-                      snapOutTimeSlow(game);
-                    });
-              });
+      if (!player.falling()) {
+        for (Enemy enemy : enemies) {
+          if (!enemy.used() && enemy.getPosition().sub(player.getPosition()).length() < 10f) {
+            enemy.expend();
+            triggered = enemy;
+            lerp(
+                50,
+                f -> game.setTimescale(f),
+                1f,
+                0.2f,
+                () -> {
+                  timeSlowed = true;
+                  lerp(
+                      1000,
+                      f -> {
+                        slowBarWidth = f;
+                      },
+                      game.getWidth(),
+                      0,
+                      () -> {
+                        snapOutTimeSlow(game);
+                      });
+                });
+          }
         }
       }
     } else if (triggered.dying()) snapOutTimeSlow(game);
@@ -205,6 +224,13 @@ public class GameWorld extends GameState {
   @Override
   public void render(Game game, Graphics graphics) throws TundraException {
     graphics.setClearColour(new Vector3f(0.8f, 0.8f, 0.8f));
+    graphics.setColour(new Vector3f());
+    graphics.drawModel(
+        Model.PLANE,
+        new Matrix4f()
+            .translate(camera.getPosition().mul(1, 0, 1).add(0, -15f, 0))
+            .rotateX(-(float) Math.PI / 2)
+            .scale(500f, 500f, 500f));
     if (timeSlowed) {
       graphics.setColour(new Vector3f(1f, 1f, 1f));
       graphics.fillRect(
