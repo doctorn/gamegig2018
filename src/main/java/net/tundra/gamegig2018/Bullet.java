@@ -8,6 +8,7 @@ import net.tundra.core.resources.models.Model;
 import net.tundra.core.scene.Light;
 import net.tundra.core.scene.PhysicsObject;
 import net.tundra.core.scene.TrackingLight;
+import net.tundra.gamegig2018.particles.Explosion;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector2f;
@@ -64,6 +65,9 @@ public class Bullet extends PhysicsObject {
     if (other instanceof ForegroundBuilding || other instanceof Enemy) {
       light.kill();
       kill();
+    } else if (other instanceof Bullet) {
+      kill();
+      world.addObject(new Explosion(world, new Vector2f(getPosition().x, getPosition().y)));
     }
   }
 
