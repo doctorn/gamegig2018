@@ -2,20 +2,25 @@
 - [x] Global lights
 
 - [x] Add foreground buildings collisions
-- [ ] Foreground building sizing
 - [x] Foreground building collapse on collision
-- [ ] Background buildings
-- [ ] Building textures
 - [x] Building popins
+- [x] Background buildings
+- [ ] Foreground building sizing
+- [ ] Background building sizing
+- [ ] Building textures
 
 - [x] Player movement
 - [x] Enemies
-- [ ] Enemies shoot bullets
-- [ ] Crates
 - [x] Bullets
-- [ ] Time slow
-- [ ] Power-ups
+- [x] Time slow
 - [ ] Advanced camera
+- [ ] Crates
+- [ ] Power-ups
+
+- [ ] Player shoot in time slow
+- [ ] Restore time from hit
+- [ ] Player die if fall off
+- [ ] Enemies shoot bullets
 
 - [x] Smoke
 - [x] Explosions 
@@ -26,12 +31,13 @@
 - [x] Player textures
 - [x] Gun
 - [x] Enemy textures
-- [ ] Enemy guns point at player
-- [ ] Bullet textures
-- [ ] Background quads
+- [x] Bullet textures
 - [x] Bullet lights
-- [ ] Any furhter lights
+- [x] Any furhter lights
+- [ ] Enemy guns point at player
+- [ ] Background quads
 
+- [ ] Time slow count down render
 - [ ] Timer (render)
 
 - [ ] Title page

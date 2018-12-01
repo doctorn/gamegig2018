@@ -1,9 +1,9 @@
 package net.tundra.gamegig2018;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import net.tundra.core.Game;
 import net.tundra.core.GameState;
 import net.tundra.core.TundraException;
@@ -21,6 +21,7 @@ public class GameWorld extends GameState {
   public static Font FONT;
   public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN;
   public static Sprite BULLET;
+  private boolean timeSlowed = false;
   private Camera camera, shadow;
   private Player player;
   private List<Enemy> enemies = new ArrayList<>();
@@ -41,7 +42,9 @@ public class GameWorld extends GameState {
 
     player = new Player(this, new Vector2f(0f, 2f));
     addObject(player);
-    addObject(new Enemy(this, new Vector2f(20f, 2f)));
+    Enemy test = new Enemy(this, new Vector2f(20f, 2f));
+    addObject(test);
+    enemies.add(test);
     camera = new net.tundra.core.scene.OrbitalCamera(player, 30f);
 
     for (int i = -1; i < 2; i++) {
@@ -51,10 +54,10 @@ public class GameWorld extends GameState {
       foregroundBuildings.add(fb);
     }
 
-    for(int j = 0; j < 4; j++) {
+    for (int j = 0; j < 4; j++) {
       for (int i = -1; i < 2; i++) {
         BackgroundBuilding bb =
-            new BackgroundBuilding(new Vector3f((float) i * 22, -10, (float)-3*(j + 1)), 10, 10);
+            new BackgroundBuilding(new Vector3f((float) i * 22, -10, (float) -3 * (j + 1)), 10, 10);
         addObject(bb);
         backgroundBuildings.add(bb);
       }
@@ -76,43 +79,87 @@ public class GameWorld extends GameState {
 
   @Override
   public void update(Game game, float delta) throws TundraException {
+    List<ForegroundBuilding> fbToCull =
+        foregroundBuildings
+            .stream()
+            .filter(
+                b -> b.getPosition().x + (float) b.getWidth() < camera.getPosition().x - cullOffset)
+            .collect(Collectors.toList());
 
-    List<ForegroundBuilding> fbToCull = foregroundBuildings.stream()
-        .filter(b -> b.getPosition().x + (float)b.getWidth() < camera.getPosition().x - cullOffset)
-        .collect(Collectors.toList());
+    List<BackgroundBuilding> bbToCull =
+        backgroundBuildings
+            .stream()
+            .filter(
+                b -> b.getPosition().x + (float) b.getWidth() < camera.getPosition().x - cullOffset)
+            .collect(Collectors.toList());
 
-    List<BackgroundBuilding> bbToCull = backgroundBuildings.stream()
-        .filter(b -> b.getPosition().x + (float)b.getWidth() < camera.getPosition().x - cullOffset)
-        .collect(Collectors.toList());
-
-    for(ForegroundBuilding fb : fbToCull) {
+    for (ForegroundBuilding fb : fbToCull) {
       foregroundBuildings.remove(fb);
       fb.kill();
     }
 
-    for(BackgroundBuilding bb : bbToCull) {
+    for (BackgroundBuilding bb : bbToCull) {
       backgroundBuildings.remove(bb);
       bb.kill();
     }
 
     ForegroundBuilding currentFore = foregroundBuildings.get(foregroundBuildings.size() - 1);
-    if(currentFore.getPosition().x - currentFore.getWidth() < camera.getPosition().x + cullOffset) {
+    if (currentFore.getPosition().x - currentFore.getWidth()
+        < camera.getPosition().x + cullOffset) {
       ForegroundBuilding fb =
-          new ForegroundBuilding(new Vector3f( currentFore.getPosition().x + 22, -10, 0), false, 10, 10);
+          new ForegroundBuilding(
+              new Vector3f(currentFore.getPosition().x + 22, -10, 0), false, 10, 10);
       addObject(fb);
       foregroundBuildings.add(fb);
     }
 
     BackgroundBuilding currentBack = backgroundBuildings.get(backgroundBuildings.size() - 1);
-    if(currentBack.getPosition().x - currentBack.getWidth() < camera.getPosition().x + cullOffset) {
-      for(int j = 0; j < 4; j++) {
+    if (currentBack.getPosition().x - currentBack.getWidth()
+        < camera.getPosition().x + cullOffset) {
+      for (int j = 0; j < 4; j++) {
         BackgroundBuilding bb =
-            new BackgroundBuilding(new Vector3f(currentBack.getPosition().x + 22, -10, (float)-3*(j + 1)), 10, 10);
+            new BackgroundBuilding(
+                new Vector3f(currentBack.getPosition().x + 22, -10, (float) -3 * (j + 1)), 10, 10);
         addObject(bb);
         backgroundBuildings.add(bb);
       }
     }
 
+    Iterator<Enemy> iter = enemies.iterator();
+    while (iter.hasNext()) {
+      if (iter.next().dying()) iter.remove();
+    }
+
+    if (!timeSlowed) {
+      for (Enemy enemy : enemies) {
+        if (enemy.getPosition().sub(player.getPosition()).length() < 10f) {
+          timeSlowed = true;
+          lerp(50, f -> game.setTimescale(f), 1f, 0.2f);
+          after(
+              /* TODO */ 1000,
+              () -> {
+                timeSlowed = false;
+                lerp(50, f -> game.setTimescale(f), 0.2f, 1f);
+              });
+        }
+      }
+    } else {
+      boolean found = false;
+      for (Enemy enemy : enemies) {
+        if (enemy.getPosition().sub(player.getPosition()).length() < 7.5f) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        timeSlowed = false;
+        lerp(50, f -> game.setTimescale(f), 0.2f, 1f);
+      }
+    }
+  }
+
+  public boolean timeSlowed() {
+    return timeSlowed();
   }
 
   @Override
