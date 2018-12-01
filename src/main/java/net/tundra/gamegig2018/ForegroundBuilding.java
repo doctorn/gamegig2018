@@ -30,7 +30,7 @@ public class ForegroundBuilding extends PhysicsObject {
     @Override
     public void render(Game game, Graphics graphics) throws TundraException {
         if (collapsable) {
-            graphics.setColour(new Vector3f(0.4f, 0.4f, 0.4f));
+            graphics.setColour(new Vector3f(1f, 0.4f, 0.4f));
         } else {
             graphics.setColour(new Vector3f(0.6f, 0.6f, 0.6f));
         }
@@ -47,7 +47,8 @@ public class ForegroundBuilding extends PhysicsObject {
             getBody().setGravity(new javax.vecmath.Vector3f(0,0,0));
             getBody().setLinearVelocity(new javax.vecmath.Vector3f(0,0,0));
         } else if (collapsable) {
-            getBody().setGravity(new javax.vecmath.Vector3f(0,-10,0));
+            getBody().setGravity(new javax.vecmath.Vector3f(0,-5,0));
+
         }
     }
 

@@ -89,7 +89,7 @@ public class Player extends PhysicsObject {
       ForegroundBuilding building = (ForegroundBuilding) other;
       if (building.getCollapsable())
         world.after(
-            500,
+            250,
             () -> {
               building.setToCollapse(true);
             });

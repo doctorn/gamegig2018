@@ -31,6 +31,7 @@ public class BackgroundBuilding extends GameObject implements Trackable {
 
     @Override
     public void render(Game game, Graphics graphics) throws TundraException {
+        graphics.setColour(new Vector3f(0.5f, 0.5f, 0.6f));
         graphics.drawModel(Model.CUBE,
             new Matrix4f().translate(getPosition()).scale(width, height, depth));
     }
