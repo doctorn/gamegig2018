@@ -43,7 +43,6 @@ public class GameWorld extends GameState {
   private Player player;
   private Enemy triggered;
   private List<Enemy> enemies = new ArrayList<>();
-  private List<Crate> crates = new ArrayList<>();
   private List<ForegroundBuilding> foregroundBuildings = new ArrayList<>();
   private List<List<BackgroundBuilding>> backgroundBuildingsList = new ArrayList<>();
   private float slowBarWidth;
@@ -120,9 +119,9 @@ public class GameWorld extends GameState {
     addCamera(camera);
     activate(camera);
 
-    main = new FixedLight(new Vector3f(-1f, -1f, -2f), new Vector3f(0.8f, 0.8f, 0.8f));
+    main = new FixedLight(new Vector3f(1f, -1f, -2f), new Vector3f(0.8f, 0.8f, 0.8f));
     addLight(main);
-    shadow = new ShadowCamera(player, new Vector3f(12.5f, 12.5f, 25f));
+    shadow = new ShadowCamera(player, new Vector3f(-12.5f, 12.5f, 25f));
     addCamera(shadow);
     enableShadowMapping(shadow, main);
 
@@ -178,11 +177,10 @@ public class GameWorld extends GameState {
                   this,
                   new Vector3f(
                       fb.getPosition().x + (fb.getWidth() - 1) * (2 * random.nextFloat() - 1),
-                      fb.getPosition().y + 10f,
+                      fb.getPosition().y + fb.getHeight(),
                       fb.getPosition().z + 3f * (i % 2 == 0 ? 1f : -1f)),
                   random.nextFloat());
           addObject(crate);
-          crates.add(crate);
         }
 
         if (pathCrate) {
@@ -191,11 +189,10 @@ public class GameWorld extends GameState {
                   this,
                   new Vector3f(
                       fb.getPosition().x + (fb.getWidth() - 1) * (2 * random.nextFloat() - 1),
-                      fb.getPosition().y + 10f,
+                      fb.getPosition().y + fb.getHeight(),
                       fb.getPosition().z),
                   random.nextFloat());
           addObject(crate);
-          crates.add(crate);
         }
 
         // spawn enemy

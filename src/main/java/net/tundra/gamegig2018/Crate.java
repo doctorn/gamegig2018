@@ -42,7 +42,10 @@ public class Crate extends PhysicsObject {
       world.addObject(new Explosion(world, new Vector2f(getPosition().x, getPosition().y)));
       for (int i = 0; i < 5; i++)
         world.addObject(
-            new Part(world, new Vector2f(getPosition().x, getPosition().y), GameWorld.CRATE_PARTS));
+            new Part(
+                world,
+                new Vector3f(getPosition().x, getPosition().y, 0.1f),
+                GameWorld.CRATE_PARTS));
       kill();
     }
   }

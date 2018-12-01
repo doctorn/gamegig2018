@@ -30,23 +30,24 @@
 - [x] Enemy management
 - [x] Crate managements
 
-- [ ] Building textures
-
-- [ ] Power-ups
+- [x] Building textures
+- [ ] Building borders
 
 - [ ] Restore time from hit
 - [ ] Player die if fall off
-- [ ] Enemies shoot bullets
-
-- [ ] Explosion force
-
-- [ ] Enemy guns point at player
 
 - [ ] Timer (render)
+
+- [ ] Enemy guns point at player
+- [ ] Enemies shoot bullets
+
+- [ ] Power-ups
 
 - [ ] Title page
 - [ ] Score screen
 - [ ] Restart
+
+- [ ] Fix shadow map constant
 
 # Asset TODO list
 
@@ -56,6 +57,6 @@
 - [ ] More time
 
 - [x] Building sides
-- [ ] Building roofs
+- [x] Building roofs
 - [x] Air con
 - [x] Moon

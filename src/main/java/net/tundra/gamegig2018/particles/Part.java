@@ -21,6 +21,10 @@ public class Part extends PhysicsObject {
   private Sprite sprite;
 
   public Part(GameWorld world, Vector2f position, SpriteSheet sheet) {
+    this(world, new Vector3f(position.x, position.y, 0), sheet);
+  }
+
+  public Part(GameWorld world, Vector3f position, SpriteSheet sheet) {
     super(
         new Vector3f(position.x, position.y, 0f),
         Model.CUBE,
