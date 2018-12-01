@@ -29,25 +29,25 @@
 - [x] Screenshake
 - [x] Enemy management
 - [x] Crate managements
-
 - [x] Building textures
-- [ ] Building borders
+- [x] Building borders
+- [x] Fix shadow map constant
+- [x] Player die if fall off
 
-- [ ] Restore time from hit
-- [ ] Player die if fall off
-
-- [ ] Timer (render)
+- [ ] Air conditioners
 
 - [ ] Enemy guns point at player
 - [ ] Enemies shoot bullets
+
+- [ ] Restore time from hit
+
+- [ ] Timer (render)
 
 - [ ] Power-ups
 
 - [ ] Title page
 - [ ] Score screen
 - [ ] Restart
-
-- [ ] Fix shadow map constant
 
 # Asset TODO list
 

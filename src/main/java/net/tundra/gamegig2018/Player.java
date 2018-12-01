@@ -67,7 +67,7 @@ public class Player extends PhysicsObject {
       javax.vecmath.Vector3f velocity = new javax.vecmath.Vector3f();
       getBody().setAngularVelocity(new javax.vecmath.Vector3f());
       getBody().getLinearVelocity(velocity);
-      getBody().setLinearVelocity(new javax.vecmath.Vector3f(10f, velocity.y, 0f));
+      getBody().setLinearVelocity(new javax.vecmath.Vector3f(12f, velocity.y, 0f));
 
       if (game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_SPACE)) {
         if (!world.timeSlowed() && jumps < 1) {

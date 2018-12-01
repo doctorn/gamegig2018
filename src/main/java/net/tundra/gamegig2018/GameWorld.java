@@ -14,14 +14,16 @@ import net.tundra.core.resources.sprites.Font;
 import net.tundra.core.resources.sprites.Sprite;
 import net.tundra.core.resources.sprites.SpriteSheet;
 import net.tundra.core.scene.Camera;
+import net.tundra.core.scene.Event;
 import net.tundra.core.scene.FixedLight;
 import net.tundra.core.scene.Light;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class GameWorld extends GameState {
-  public static Font FONT;
+  public static Font FONT, FONT_BIG;
   public static SpriteSheet SMOKE,
       EXPLOSION,
       TIM,
@@ -47,12 +49,18 @@ public class GameWorld extends GameState {
   private List<List<BackgroundBuilding>> backgroundBuildingsList = new ArrayList<>();
   private float slowBarWidth;
   private Light main;
+  private float timeRemaining = 30000;
   private static final float cullOffset = 100;
   private static final Random random = new Random();
+  private boolean flash, added = false;
+  private String addedMessage;
+  private float addedAmount;
+  private Event addedTimeout;
 
   @Override
   public void init(Game game) throws TundraException {
     FONT = new Font(new SpriteSheet("res/font.png", 20, 22));
+    FONT_BIG = new Font(new SpriteSheet("res/font.png", 20, 22).scale(3f));
     SMOKE = new SpriteSheet("res/smoke.png", 16, 16);
     EXPLOSION = new SpriteSheet("res/explosion.png", 128, 128);
     TIM = new SpriteSheet("res/timothy.png", 24, 24);
@@ -85,7 +93,7 @@ public class GameWorld extends GameState {
       foregroundBuildings.add(fb);
     }
 
-    for (int j = 0; j < 2; j++) {
+    for (int j = 0; j < 1; j++) {
       List<BackgroundBuilding> backgroundBuildings = new ArrayList<>();
       for (int i = -3; i < 2; i++) {
         int height = random.nextInt(5);
@@ -126,12 +134,22 @@ public class GameWorld extends GameState {
     enableShadowMapping(shadow, main);
 
     setLighting(true);
-    // toggleDebug();
+    toggleDebug();
     togglePhysics();
+
+    every(
+        200,
+        () -> {
+          if (timeRemaining < 5000) flash = !flash;
+          else flash = false;
+        });
   }
 
   @Override
   public void update(Game game, float delta) throws TundraException {
+    timeRemaining -= delta;
+    if (timeRemaining < 0) timeRemaining = 0;
+
     List<ForegroundBuilding> fbToCull =
         foregroundBuildings
             .stream()
@@ -151,7 +169,7 @@ public class GameWorld extends GameState {
       int width = collapse ? 5 : 8 + 4 * random.nextInt(2);
       int height = random.nextInt(5) - 2;
       int gap = 4;
-      if(currentFore.getPosition().y + height + currentFore.getHeight() <= -4 ) {
+      if (currentFore.getPosition().y + height + currentFore.getHeight() <= -4) {
         height = -height;
       }
       ForegroundBuilding fb =
@@ -318,6 +336,47 @@ public class GameWorld extends GameState {
           Math.round(slowBarWidth),
           20);
     }
+
+    int seconds = (int) Math.floor(timeRemaining / 1000f);
+    int millis = (int) Math.floor((timeRemaining % 1000f) / 10f);
+
+    String timeStatus =
+        seconds + ":" + ((Integer.toString(millis).length() == 1) ? "0" : "") + millis;
+    graphics.drawStringFlash(
+        timeStatus,
+        FONT_BIG,
+        Math.round(game.getWidth() / 2f - timeStatus.length() * FONT_BIG.getCharacterWidth() / 2f),
+        40,
+        new Vector4f(1f, 0f, 0f, flash ? 1f : 0f));
+
+    if (added)
+      graphics.drawStringFlash(
+          addedMessage,
+          FONT,
+          Math.round(game.getWidth() / 2f - timeStatus.length() * FONT.getCharacterWidth() / 2f),
+          130,
+          new Vector4f(addedAmount < 0 ? 1f : 0f, addedAmount > 0 ? 1f : 0f, 0f, 1f));
+  }
+
+  public void addTime(float toAdd) {
+    timeRemaining += toAdd;
+    added = true;
+    addedAmount = toAdd;
+    int seconds = (int) Math.floor(toAdd / 1000f);
+    int millis = (int) Math.floor((toAdd % 1000f) / 10f);
+    addedMessage =
+        (addedAmount > 0 ? "+" : "")
+            + seconds
+            + ":"
+            + ((Integer.toString(millis).length() == 1) ? "0" : "")
+            + millis;
+    if (addedTimeout != null) addedTimeout.kill();
+    addedTimeout =
+        after(
+            500,
+            () -> {
+              added = false;
+            });
   }
 
   @Override
