@@ -134,8 +134,9 @@ public class GameWorld extends GameState {
     addCamera(shadow);
     enableShadowMapping(shadow, main);
 
+    setGravity(new Vector3f(0, -15, 0));
+
     setLighting(true);
-    toggleDebug();
     togglePhysics();
 
     every(
@@ -355,7 +356,7 @@ public class GameWorld extends GameState {
           addedMessage,
           FONT,
           Math.round(game.getWidth() / 2f - timeStatus.length() * FONT.getCharacterWidth() / 2f),
-          130,
+          110,
           new Vector4f(addedAmount < 0 ? 1f : 0f, addedAmount > 0 ? 1f : 0f, 0f, 1f));
   }
 

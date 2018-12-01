@@ -32,7 +32,7 @@ public class Tundra extends GameState {
     after(
         3000,
         () -> {
-          game.enterState(1);
+          game.enterState(2);
         });
   }
 

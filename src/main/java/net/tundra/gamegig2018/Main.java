@@ -12,8 +12,9 @@ public class Main extends Game {
   public void initStates() throws TundraException {
     getInput().setMouseGrabbed(true);
     addState(new Tundra());
+    addState(new Menu());
     addState(new GameWorld());
-    enterState(1);
+    enterState(0);
   }
 
   public static void main(String args[]) throws TundraException {

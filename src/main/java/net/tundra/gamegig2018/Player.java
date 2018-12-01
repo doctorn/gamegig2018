@@ -58,6 +58,7 @@ public class Player extends PhysicsObject {
   @Override
   public void configure(RigidBodyConstructionInfo info) {
     info.angularDamping = 1f;
+    info.linearDamping = 0.05f;
   }
 
   @Override
@@ -67,7 +68,7 @@ public class Player extends PhysicsObject {
       javax.vecmath.Vector3f velocity = new javax.vecmath.Vector3f();
       getBody().setAngularVelocity(new javax.vecmath.Vector3f());
       getBody().getLinearVelocity(velocity);
-      getBody().setLinearVelocity(new javax.vecmath.Vector3f(12f, velocity.y, 0f));
+      getBody().setLinearVelocity(new javax.vecmath.Vector3f(14f, velocity.y, 0f));
 
       if (game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_SPACE)) {
         if (!world.timeSlowed() && jumps < 1) {
@@ -90,7 +91,7 @@ public class Player extends PhysicsObject {
     if (other instanceof ForegroundBuilding) {
       jumps = 0;
       ForegroundBuilding building = (ForegroundBuilding) other;
-      if (getPosition().y - 0.5f < building.getPosition().y + building.getHeight()
+      if (getPosition().y - 0.65f < building.getPosition().y + building.getHeight()
           && getPosition().x < building.getPosition().x - building.getWidth()) {
         falling = true;
       }

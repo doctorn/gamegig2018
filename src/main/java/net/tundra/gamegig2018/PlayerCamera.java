@@ -34,7 +34,7 @@ public class PlayerCamera extends ShakableCamera {
                       .add(0, 2f, 0)
                       .sub(getPosition())
                       .mul(1, 1, 0)
-                      .mul(0.01f)));
+                      .mul(0.02f)));
       setTarget(world.getPlayer().getPosition());
     }
   }
