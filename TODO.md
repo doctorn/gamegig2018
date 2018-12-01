@@ -13,6 +13,7 @@
 - [x] Enemies
 - [x] Bullets
 - [x] Time slow
+- [ ] Enemy management
 - [ ] Advanced camera
 - [ ] Crates
 - [ ] Power-ups

@@ -34,23 +34,23 @@ public class Player extends PhysicsObject {
 
   private void lerpGun() {
     world.lerp(
-        200,
+        250,
         f -> {
           gunAngle = f;
         },
-        -(float) Math.PI / 16,
-        (float) Math.PI / 16,
+        -(float) Math.PI / 8,
+        (float) Math.PI / 8,
         this::reverseLerpGun);
   }
 
   private void reverseLerpGun() {
     world.lerp(
-        800,
+        250,
         f -> {
           gunAngle = f;
         },
-        (float) Math.PI / 16,
-        -(float) Math.PI / 16,
+        (float) Math.PI / 8,
+        -(float) Math.PI / 8,
         this::lerpGun);
   }
 
@@ -109,5 +109,19 @@ public class Player extends PhysicsObject {
             .translate(getPosition().add(0, 0, 0.005f))
             .scale(0.5f * 24f / 16f)
             .rotateZ(gunAngle));
+
+    if (world.timeSlowed()) {
+      boolean lighting = world.lightingEnabled();
+      world.setLighting(false);
+      graphics.setColour(new Vector3f(1f, 0f, 0f));
+      graphics.drawModel(
+          Model.CUBE,
+          new Matrix4f()
+              .translate(getPosition().add(0, 0, -0.005f))
+              .rotateZ(gunAngle)
+              .translate(100.8f, -0.4f, 0)
+              .scale(100f, 0.01f, 0.01f));
+      world.setLighting(lighting);
+    }
   }
 }
