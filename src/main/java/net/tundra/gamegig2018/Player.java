@@ -9,6 +9,7 @@ import net.tundra.core.resources.sprites.Animation;
 import net.tundra.core.scene.PhysicsObject;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class Player extends PhysicsObject {
@@ -17,9 +18,9 @@ public class Player extends PhysicsObject {
   private Animation running;
   private GameWorld world;
 
-  public Player(GameWorld world, Vector3f position) {
+  public Player(GameWorld world, Vector2f position) {
     super(
-        position,
+        new Vector3f(position.x, position.y, 0),
         Model.CUBE,
         new Quaternionf(),
         new Vector3f(0.3f, 0.5f, 0.5f).mul(24f / 16f),
@@ -70,6 +71,13 @@ public class Player extends PhysicsObject {
       getBody().applyCentralImpulse(new javax.vecmath.Vector3f(0f, 5f, 0f));
       jumps++;
     }
+
+    if (game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_B))
+      world.addObject(
+          new Bullet(
+              world,
+              new Vector2f(getPosition().x, getPosition().y).add(3f, 0f),
+              new Vector2f((float) Math.cos(gunAngle), (float) Math.sin(gunAngle))));
   }
 
   @Override

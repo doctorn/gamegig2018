@@ -9,7 +9,7 @@
 - [ ] Building popins
 
 - [x] Player movement
-- [ ] Enemies
+- [x] Enemies
 - [ ] Crates
 - [ ] Bullets
 - [ ] Time slow
@@ -25,6 +25,7 @@
 - [x] Player textures
 - [x] Gun
 - [x] Enemy textures
+- [ ] Enemy guns point at player
 - [ ] Bullet textures
 - [ ] Background quads
 - [ ] Bullet lights
