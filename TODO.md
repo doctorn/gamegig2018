@@ -19,6 +19,7 @@
 
 - [ ] Shadow mapping
 - [ ] Player textures
+- [ ] Gun
 - [ ] Enemy textures
 - [ ] Bullet textures
 - [ ] Background quads
