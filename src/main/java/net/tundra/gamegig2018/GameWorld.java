@@ -23,7 +23,7 @@ import org.joml.Vector3f;
 public class GameWorld extends GameState {
   public static Font FONT;
   public static SpriteSheet SMOKE, EXPLOSION, TIM, ANDROID, GUN, ANDROID_PARTS;
-  public static Sprite BULLET, CRATE;
+  public static Sprite BULLET, CRATE, FILTER;
   private boolean timeSlowed = false;
   private Camera camera, shadow;
   private Player player;
@@ -47,6 +47,9 @@ public class GameWorld extends GameState {
     GUN = new SpriteSheet("res/gun.png", 24, 24);
     BULLET = new Sprite("res/bullet.png");
     CRATE = new Sprite("res/crate.png");
+    FILTER = new Sprite("res/filter.png");
+
+    FILTER.enableSmoothing();
 
     player = new Player(this, new Vector2f(0f, 2f));
     addObject(player);
@@ -54,7 +57,7 @@ public class GameWorld extends GameState {
     addObject(test);
     enemies.add(test);
     // addObject(new Crate(this, new Vector3f(20f, 2f, 0f)));
-    camera = new PlayerCamera();
+    camera = new PlayerCamera(this);
 
     for (int i = -1; i < 2; i++) {
       ForegroundBuilding fb =
@@ -104,7 +107,7 @@ public class GameWorld extends GameState {
     enableShadowMapping(shadow, main);
 
     setLighting(true);
-    toggleDebug();
+    // toggleDebug();
     togglePhysics();
   }
 
@@ -230,7 +233,8 @@ public class GameWorld extends GameState {
 
   @Override
   public void render(Game game, Graphics graphics) throws TundraException {
-    graphics.setClearColour(new Vector3f(0.8f, 0.8f, 0.8f));
+    graphics.setClearColour(new Vector3f(1f, 0.71f, 0.76f));
+    graphics.drawImage(FILTER, 0, 0, game.getWidth(), game.getHeight());
     graphics.setColour(new Vector3f());
     graphics.drawModel(
         Model.PLANE,

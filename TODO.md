@@ -25,8 +25,8 @@
 - [x] Exploding parts
 - [x] Foreground building sizing
 - [x] Background building sizing
+- [x] Advanced camera
 
-- [ ] Advanced camera
 - [ ] Building textures
 
 - [ ] Enemy management
@@ -40,7 +40,6 @@
 - [ ] Explosion force
 
 - [ ] Enemy guns point at player
-- [ ] Background quads
 
 - [ ] Timer (render)
 
@@ -54,8 +53,7 @@
 - [ ] Double bullet powerup
 - [ ] More slow down powerup
 - [ ] More time
-- [ ] Building 1 window
-- [ ] Building 2 window
-- [ ] Building 3 window
+
+- [ ] Buildings
 - [ ] Air con
 - [ ] Moon
