@@ -1,5 +1,5 @@
-- [ ] Basic camera 
-- [ ] Global lights
+- [x] Basic camera 
+- [x] Global lights
 
 - [ ] Add foreground buildings (collisions)
 - [ ] Background buildings
@@ -13,8 +13,9 @@
 - [ ] Power-ups
 - [ ] Advanced camera
 
-- [ ] Smoke
-- [ ] Explosions (apply force)
+- [x] Smoke
+- [ ] Explosions 
+- [ ] Explosion force
 - [ ] Exploding parts
 
 - [ ] Shadow mapping
