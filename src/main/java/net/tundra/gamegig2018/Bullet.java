@@ -30,6 +30,7 @@ public class Bullet extends PhysicsObject {
     this.getBody().setGravity(new javax.vecmath.Vector3f());
     this.velocity = new Vector3f(velocity.x, velocity.y, 0).normalize(30f);
     angle = (float) Math.atan(velocity.y / velocity.x);
+    if(velocity.x < 0) angle += Math.PI;
     this.world = world;
     world.after(
         8000,

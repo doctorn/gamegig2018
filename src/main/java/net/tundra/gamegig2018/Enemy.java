@@ -18,7 +18,7 @@ public class Enemy extends PhysicsObject {
   private float gunAngle = 0f;
   private Animation running;
   private GameWorld world;
-  private boolean slowed = false;
+  private boolean slowed = false, lerping = false, shooting = false;
 
   public Enemy(GameWorld world, Vector2f position) {
     super(
@@ -45,6 +45,20 @@ public class Enemy extends PhysicsObject {
         this.kill();
     }
     if(Math.abs(world.getPlayer().getPosition().x - getPosition().x) < 20) {
+      if(world.getPlayer().getPosition().x < getPosition().x)
+        gunAngle = (world.getPlayer().getPosition().sub(getPosition())).angle(new Vector3f(-1, 0, 0));
+      else if(!lerping) {
+          lerping = true;
+          world.lerp(100, angle -> gunAngle = angle, (float)Math.PI / 2, 0);
+      }
+      if(!shooting) {
+          shooting = true;
+          world.after(800, ()-> world.addObject(
+              new Bullet(
+                  world,
+                  new Vector2f(getPosition().x, getPosition().y).sub(0.8f, 0.4f),
+                  new Vector2f((float) -Math.cos(gunAngle), (float) Math.sin(gunAngle)))));
+      }
       running.update(delta);
       javax.vecmath.Vector3f velocity = new javax.vecmath.Vector3f();
       getBody().setAngularVelocity(new javax.vecmath.Vector3f());

@@ -101,6 +101,10 @@ public class Player extends PhysicsObject {
             () -> {
               building.setToCollapse(true);
             });
+    } else if (other instanceof Bullet) {
+        other.kill();
+        world.shake(500);
+        world.addTime(-4000f);
     }
   }
 
