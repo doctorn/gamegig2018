@@ -69,11 +69,11 @@ public class Player extends PhysicsObject {
       getBody().getLinearVelocity(velocity);
       getBody().setLinearVelocity(new javax.vecmath.Vector3f(10f, velocity.y, 0f));
 
-      if (game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_SPACE) && jumps < 1) {
-        if (!world.timeSlowed()) {
+      if (game.getInput().isKeyPressed(org.lwjgl.input.Keyboard.KEY_SPACE)) {
+        if (!world.timeSlowed() && jumps < 1) {
           getBody().applyCentralImpulse(new javax.vecmath.Vector3f(0f, 5f, 0f));
           jumps++;
-        } else {
+        } else if (world.timeSlowed()) {
           world.snapOutTimeSlow(game);
           world.addObject(
               new Bullet(
@@ -82,7 +82,7 @@ public class Player extends PhysicsObject {
                   new Vector2f((float) Math.cos(gunAngle), (float) Math.sin(gunAngle))));
         }
       }
-    }
+    } else if (world.timeSlowed()) world.snapOutTimeSlow(game);
   }
 
   @Override
@@ -90,8 +90,10 @@ public class Player extends PhysicsObject {
     if (other instanceof ForegroundBuilding) {
       jumps = 0;
       ForegroundBuilding building = (ForegroundBuilding) other;
-      if (getPosition().y - 0.75 < building.getPosition().y + building.getHeight()
-          && getPosition().x < building.getPosition().x - building.getWidth()) falling = true;
+      if (getPosition().y - 0.5f < building.getPosition().y + building.getHeight()
+          && getPosition().x < building.getPosition().x - building.getWidth()) {
+        falling = true;
+      }
       if (building.getCollapsable())
         world.after(
             250,

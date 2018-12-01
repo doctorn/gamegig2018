@@ -28,10 +28,10 @@
 - [x] Advanced camera
 - [x] Screenshake
 - [x] Enemy management
+- [x] Crate managements
 
 - [ ] Building textures
 
-- [ ] Crate managements
 - [ ] Power-ups
 
 - [ ] Restore time from hit
@@ -55,6 +55,7 @@
 - [ ] More slow down powerup
 - [ ] More time
 
-- [ ] Buildings
-- [ ] Air con
-- [ ] Moon
+- [x] Building sides
+- [ ] Building roofs
+- [x] Air con
+- [x] Moon
